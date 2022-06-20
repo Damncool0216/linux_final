@@ -1,0 +1,42 @@
+version: "3"
+services:
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    ports:
+      - 80:80
+    links:
+      - php
+    volumes:
+      - ./www/html/:/var/www/html/
+    environment:
+      TZ: Asia/Shanghai
+    restart: always
+
+  php:
+    build: ./php
+    container_name: php
+    expose:
+      - 9000
+    ports:
+      - 9000:9000
+    links:
+      - mysql
+    volumes:
+      - ./www/html/:/var/www/html/
+    environment:
+      TZ: Asia/Shanghai
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: damncool
+      MYSQL_PASSWORD: 12345
+      TZ: Asia/Shanghai
